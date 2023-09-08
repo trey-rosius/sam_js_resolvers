@@ -43,3 +43,23 @@ Status Codes  [code:count]                      200:3000
 Error Set:
 
 ```
+
+```
+Lambda NodeJs (18)
+--------------------------------------------------------------------------------------
+Requests      [total, rate, throughput]
+              3000,   50.02, 49.54
+Duration      [total, attack, wait]
+              1m1s,  59.976s, 580.484ms
+Latencies     [min,      mean,      50,        90,        95,      99,    max]
+              301.284ms, 663.146ms, 513.768ms, 764.986ms, 2.276s, 4.051s, 4.869s
+
+APPSYNC_JS
+----------------------------------------------------------------------------------------
+Requests      [total, rate, throughput]
+               3000,  50.02, 49.81
+Duration      [total, attack,  wait]
+               1m0s,  59.978s, 249.125ms
+Latencies     [min,      mean,      50,        90,        95,        99,         max]
+              216.848ms, 269.277ms, 250.105ms, 312.029ms, 337.313ms, 706.843ms, 1.342s
+```
