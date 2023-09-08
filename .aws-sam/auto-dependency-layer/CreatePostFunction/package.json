@@ -1,22 +1,22 @@
 {
-  "name": "graphql-stream-sub",
+  "name": "lambdas",
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "webpack.config.js",
+  "main": "createPostLambda.js",
   "scripts": {
     "test": "jest",
     "start": "webpack && webpack-dev-server --mode development",
     "build": "webpack",
     "clean": "rm -rf dist"
   },
-  "author": "Kevin Schwarz",
-  "license": "MIT No Attribution",
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.405.0",
     "@aws-sdk/lib-dynamodb": "^3.405.0",
     "aws-amplify": "^5.2.5",
-    "ksuid": "^3.0.0"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.1428.0",

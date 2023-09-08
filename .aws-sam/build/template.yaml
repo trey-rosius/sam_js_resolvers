@@ -1,0 +1,195 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    Timeout: 3
+    Environment:
+      Variables:
+        TABLE_NAME:
+          Ref: SocialMediaDynamoDBTable
+Resources:
+  CreatePostFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CreatePostFunction
+      Runtime: nodejs18.x
+      Handler: createPostLambda.handler
+    Connectors:
+      MyConnectors:
+        Properties:
+          Destination:
+            Id: SocialMediaDynamoDBTable
+          Permissions:
+          - Read
+          - Write
+    Metadata:
+      SamResourceId: CreatePostFunction
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName:
+        Fn::Sub: ${AWS::StackName}-UserPool
+      AutoVerifiedAttributes:
+      - email
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: babysitter_api
+      GenerateSecret: false
+      UserPoolId:
+        Ref: CognitoUserPool
+      ExplicitAuthFlows:
+      - ADMIN_NO_SRP_AUTH
+  SocialMediaDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: PK
+        AttributeType: S
+      - AttributeName: SK
+        AttributeType: S
+      - AttributeName: GSI1PK
+        AttributeType: S
+      - AttributeName: GSI1SK
+        AttributeType: S
+      - AttributeName: GSI2PK
+        AttributeType: S
+      - AttributeName: GSI2SK
+        AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+      - AttributeName: PK
+        KeyType: HASH
+      - AttributeName: SK
+        KeyType: RANGE
+      GlobalSecondaryIndexes:
+      - IndexName: getAllUsers
+        KeySchema:
+        - AttributeName: GSI1PK
+          KeyType: HASH
+        - AttributeName: GSI1SK
+          KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+      - IndexName: getAllPosts
+        KeySchema:
+        - AttributeName: GSI2PK
+          KeyType: HASH
+        - AttributeName: GSI2SK
+          KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+  GraphQLSocialAPI:
+    Type: AWS::Serverless::GraphQLApi
+    Properties:
+      SchemaUri: ../../schema/schema.graphql
+      Auth:
+        Type: API_KEY
+        Additional:
+        - Type: AMAZON_COGNITO_USER_POOLS
+          UserPool:
+            AwsRegion:
+              Ref: AWS::Region
+            UserPoolId:
+              Ref: CognitoUserPool
+      ApiKeys:
+        MyApiKey: {}
+      DataSources:
+        DynamoDb:
+          SocialMediaDataSource:
+            TableName:
+              Ref: SocialMediaDynamoDBTable
+            TableArn:
+              Fn::GetAtt:
+              - SocialMediaDynamoDBTable
+              - Arn
+        Lambda:
+          MyLambdaDataSource:
+            FunctionArn:
+              Fn::GetAtt:
+              - CreatePostFunction
+              - Arn
+      Functions:
+        formatUserAccountInput:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: 1.0.0
+          DataSource: NONE
+          CodeUri: ../../js_resolvers/formatUserAccountInput.js
+        createUserAccount:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: 1.0.0
+          DataSource: SocialMediaDataSource
+          CodeUri: ../../js_resolvers/createUserAccount.js
+        updateUserAccount:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: 1.0.0
+          DataSource: SocialMediaDataSource
+          CodeUri: ../../js_resolvers/updateUserAccount.js
+        getUserAccount:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: 1.0.0
+          DataSource: SocialMediaDataSource
+          CodeUri: ../../js_resolvers/updateUserAccount.js
+        createPost:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: 1.0.0
+          DataSource: SocialMediaDataSource
+          CodeUri: ../../js_resolvers/createPost.js
+        invokeCreatePostLambda:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: 1.0.0
+          DataSource: MyLambdaDataSource
+          CodeUri: ../../js_resolvers/invoker.js
+      Resolvers:
+        Mutation:
+          createUserAccount:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+            - formatUserAccountInput
+            - createUserAccount
+          updateUserAccount:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+            - updateUserAccount
+          createPost:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+            - createPost
+          createPostLambda:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+            - invokeCreatePostLambda
+        Query:
+          getUserAccount:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+            - getUserAccount
+Outputs:
+  APIEndpoint:
+    Description: GraphQLSocialMediaAPI API Endpoint
+    Value:
+      Fn::GetAtt:
+      - GraphQLSocialAPI
+      - GraphQLUrl
+  ApiKeyValue:
+    Description: GraphQLSocialAPI API Key
+    Value:
+      Fn::GetAtt:
+      - GraphQLSocialAPIMyApiKey
+      - ApiKey
