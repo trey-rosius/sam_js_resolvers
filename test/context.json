@@ -1,11 +1,40 @@
 {
   "arguments": {
-    "author": "Anonymous",
-    "title": "A simple post",
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    "userInput": {
+      "username": "rosius",
+      "firstName": "Rosius",
+      "lastName": "Rosius_last",
+      "email": "test1@gmail.com",
+      "userType": "MEMBER",
+      "profilePicUrl": "./image.jpg"
+    }
   },
   "source": {},
   "result": {},
   "request": {},
-  "prev": {}
+  "prev": {
+    "result": {
+      "key": {
+        "PK": "USER#test1@gmail.com",
+        "SK": "USER#test1@gmail.com"
+      },
+      "values": {
+        "username": "rosius",
+        "firstName": "Rosius",
+        "lastName": "Rosius_last",
+        "email": "test1@gmail.com",
+        "userType": "MEMBER",
+        "profilePicUrl": "./image.jpg",
+        "id": "2VWDhnc7TQ0LSfu10bLCNEF5ZI2",
+        "PK": "USER#test1@gmail.com",
+        "SK": "USER#test1@gmail.com",
+        "GSI1PK": "USER#",
+        "GSI1SK": "USER#test1@gmail.com",
+        "createdOn": 1694943063521
+      },
+      "condition": {
+        "PK": { "attributeExists": false }
+      }
+    }
+  }
 }

@@ -1,0 +1,16 @@
+{
+  "arguments": {
+    "postInput": {
+      "username": "rosius",
+      "firstName": "Rosius",
+      "lastName": "Rosius_last",
+      "email": "test1@gmail.com",
+      "userType": "MEMBER",
+      "profilePicUrl": "./image.jpg"
+    }
+  },
+  "source": {},
+  "result": {},
+  "request": {},
+  "prev": {}
+}
