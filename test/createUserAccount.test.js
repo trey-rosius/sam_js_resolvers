@@ -1,5 +1,10 @@
 import { test, expect } from "vitest";
 const AWS = require("aws-sdk");
+AWS.config.update({
+  accessIdKey: process.env.ACCESS_KEY_AWS,
+  secretAccessKey: process.env.SECRET_KEY_AWS,
+  region: "us-east-2",
+});
 const fs = require("fs");
 const client = new AWS.AppSync({ region: "us-east-2" });
 const runtime = { name: "APPSYNC_JS", runtimeVersion: "1.0.0" };
