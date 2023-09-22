@@ -1,12 +1,6 @@
 import { test, expect, describe } from "vitest";
 const AWS = require("aws-sdk");
-/*
-AWS.config.update({
-  accessIdKey: process.env.ACCESS_KEY_AWS,
-  secretAccessKey: process.env.SECRET_KEY_AWS,
-  region: "us-east-2",
-});
-*/
+
 const fs = require("fs");
 const client = new AWS.AppSync({ region: "us-east-2" });
 const runtime = { name: "APPSYNC_JS", runtimeVersion: "1.0.0" };
@@ -25,7 +19,6 @@ describe("sanity checks", () => {
       .promise();
 
     const result = JSON.parse(response.evaluationResult);
-    console.log("result is ", result);
 
     const condition = result.payload.condition.PK;
 
