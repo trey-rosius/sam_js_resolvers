@@ -1,5 +1,5 @@
-API_URL="https://vuamteij4fezzkvop5d3furvlq.appsync-api.us-east-2.amazonaws.com/graphql"
-API_KEY="da2-mfjkd2tezzamppchgohq6sakw4"
+API_URL=""
+API_KEY=""
 echo $API
 jq -ncM '{method: "POST", url: "https://vuamteij4fezzkvop5d3furvlq.appsync-api.us-east-2.amazonaws.com/graphql", body: {query: "mutation create { createPost(postInput:{content: \"this is the lambda function content\", imageUrl:\"rosius.jpg\",userId:\"test@gmail.com\"}) { content
 id
