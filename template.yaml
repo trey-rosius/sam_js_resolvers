@@ -189,13 +189,13 @@ Resources:
             Runtime:
               Name: APPSYNC_JS
               Version: "1.0.0"
-            Unit:
+            Pipeline:
               - getPost
           getAllPost:
             Runtime:
               Name: APPSYNC_JS
               Version: "1.0.0"
-            Unit:
+            Pipeline:
               - getAllPost
 Outputs:
   APIEndpoint:
