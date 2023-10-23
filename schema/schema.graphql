@@ -6,6 +6,7 @@ schema {
 
 type Query {
   getPost(id: String!): Post! @aws_api_key
+  getAllPosts(limit: Int!, nextToken: String): PostsResult! @aws_api_key
   getUserAccount(id: String!): User! @aws_cognito_user_pools
   getCommentsPerPost(postId: String!): [Comment!]! @aws_cognito_user_pools
   getSingleComment(commentId: String!): Comment! @aws_cognito_user_pools
@@ -93,6 +94,10 @@ type Post @aws_api_key {
 type Subscription {
   createdPost: Post @aws_subscribe(mutations: ["createPost"])
   createdComment: Comment @aws_subscribe(mutations: ["createComment"])
+}
+type PostsResult @aws_api_key {
+  items: [Post!]!
+  nextToken: String
 }
 
 enum USERTYPE {

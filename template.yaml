@@ -35,7 +35,7 @@ Resources:
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: babysitter_api
+      ClientName: social_media_api
       GenerateSecret: false
       UserPoolId: !Ref CognitoUserPool
       ExplicitAuthFlows:
@@ -126,6 +126,18 @@ Resources:
             Version: "1.0.0"
           DataSource: SocialMediaDataSource
           CodeUri: ./js_resolvers/updateUserAccount.js
+        getPost:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: "1.0.0"
+          DataSource: SocialMediaDataSource
+          CodeUri: ./js_resolvers/getPost.js
+        getAllPosts:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: "1.0.0"
+          DataSource: SocialMediaDataSource
+          CodeUri: ./js_resolvers/getAllPosts.js
         createPost:
           Runtime:
             Name: APPSYNC_JS
@@ -173,6 +185,18 @@ Resources:
               Version: "1.0.0"
             Pipeline:
               - getUserAccount
+          getPost:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: "1.0.0"
+            Unit:
+              - getPost
+          getAllPost:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: "1.0.0"
+            Unit:
+              - getAllPost
 Outputs:
   APIEndpoint:
     Description: GraphQLSocialMediaAPI API Endpoint
