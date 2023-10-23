@@ -196,7 +196,7 @@ Resources:
               Name: APPSYNC_JS
               Version: "1.0.0"
             Pipeline:
-              - getAllPost
+              - getAllPosts
 Outputs:
   APIEndpoint:
     Description: GraphQLSocialMediaAPI API Endpoint
