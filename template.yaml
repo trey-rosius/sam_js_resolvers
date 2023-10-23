@@ -191,7 +191,7 @@ Resources:
               Version: "1.0.0"
             Pipeline:
               - getPost
-          getAllPost:
+          getAllPosts:
             Runtime:
               Name: APPSYNC_JS
               Version: "1.0.0"
