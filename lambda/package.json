@@ -2,7 +2,6 @@
   "name": "lambdas",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "createPostLambda.js",
   "scripts": {
     "test": "jest",
@@ -13,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.441.0",
     "@aws-sdk/client-dynamodb": "^3.405.0",
     "@aws-sdk/lib-dynamodb": "^3.405.0",
     "aws-amplify": "^5.2.5",

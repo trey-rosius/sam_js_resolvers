@@ -1,8 +1,9 @@
 version = 0.1
 [default.deploy.parameters]
-stack_name = "social-media"
-s3_prefix = "social-media"
-region = "us-east-2"
+stack_name = "social-media-gen-ai"
+s3_prefix = "social-media-gen-ai"
+region = "us-east-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
 confirm_changeset = false
+resolve_s3 = true

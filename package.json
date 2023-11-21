@@ -2,7 +2,6 @@
   "name": "graphql-stream-sub",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "webpack.config.js",
   "scripts": {
     "test": "vitest",
@@ -13,6 +12,7 @@
   "author": "Rosius Ndimofor",
   "license": "MIT No Attribution",
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.449.0",
     "@aws-sdk/client-dynamodb": "^3.405.0",
     "@aws-sdk/lib-dynamodb": "^3.405.0",
     "aws-amplify": "^5.2.5",

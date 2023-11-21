@@ -11,6 +11,7 @@ type Query {
   getCommentsPerPost(postId: String!): [Comment!]! @aws_cognito_user_pools
   getSingleComment(commentId: String!): Comment! @aws_cognito_user_pools
   getUser(userId: String!): User! @aws_cognito_user_pools
+  generateSuggestions(input: String!): String! @aws_api_key
 }
 
 type Mutation {
@@ -20,7 +21,7 @@ type Mutation {
   createPostLambda(postInput: CreatePostInput!): Post! @aws_api_key
   createComment(commentInput: CreateCommentInput!): Comment!
     @aws_cognito_user_pools
-  deletePost(userId: String!, postId: String!): Boolean!
+  deletePost(userId: String!, postId: String!): Boolean! @aws_api_key
 }
 
 type User @aws_cognito_user_pools {
