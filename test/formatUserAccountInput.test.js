@@ -6,7 +6,7 @@ const client = new AWS.AppSync({ region: "us-east-2" });
 const runtime = { name: "APPSYNC_JS", runtimeVersion: "1.0.0" };
 
 describe("sanity checks", () => {
-  test("request correctly formated inputs", async () => {
+  test("request correctly formatted inputs", async () => {
     const code = fs.readFileSync(
       "./js_resolvers/formatUserAccountInput.js",
       "utf8"

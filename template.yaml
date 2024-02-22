@@ -16,12 +16,23 @@ Resources:
       CodeUri: lambda/
       Runtime: nodejs18.x
       Handler: generateSuggestions.handler
-      Policies:
-        - Statement:
-            - Sid: "BedrockScopedAccess"
-              Effect: "Allow"
-              Action: "bedrock:InvokeModel"
-              Resource: "arn:aws:bedrock:*::foundation-model/ai21.j2-ultra-v1"
+
+  SendMessageFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/
+      Runtime: nodejs18.x
+      Timeout: 180
+      MemorySize: 2048
+      Handler: sendMessageLambda.handler
+    Connectors:
+      MyConnectors:
+        Properties:
+          Destination:
+            Id: SocialMediaDynamoDBTable
+          Permissions:
+            - Read
+            - Write
 
   CreatePostFunction:
     Type: AWS::Serverless::Function
@@ -31,12 +42,6 @@ Resources:
       Timeout: 180
       MemorySize: 2048
       Handler: createPostLambda.handler
-      Policies:
-        - Statement:
-            - Sid: "BedrockScopedAccess"
-              Effect: "Allow"
-              Action: "bedrock:InvokeModel"
-              Resource: "arn:aws:bedrock:*::foundation-model/ai21.j2-ultra-v1"
     Connectors:
       MyConnectors:
         Properties:
@@ -123,6 +128,8 @@ Resources:
         Lambda:
           MyLambdaDataSource:
             FunctionArn: !GetAtt CreatePostFunction.Arn
+          SendLambdaDataSource:
+            FunctionArn: !GetAtt SendMessageFunction.Arn
           GenerateSuggestionSource:
             FunctionArn: !GetAtt GenerateSuggestedFunction.Arn
       Functions:
@@ -174,13 +181,18 @@ Resources:
             Version: "1.0.0"
           DataSource: MyLambdaDataSource
           CodeUri: ./js_resolvers/invoker.js
+        invokeSendMessageLambda:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: "1.0.0"
+          DataSource: SendLambdaDataSource
+          CodeUri: ./js_resolvers/invoker.js
         invokeGenerateSuggestionLambda:
           Runtime:
             Name: APPSYNC_JS
             Version: "1.0.0"
           DataSource: GenerateSuggestionSource
           CodeUri: ./js_resolvers/invoker.js
-
       Resolvers:
         Mutation:
           createUserAccount:
@@ -208,7 +220,12 @@ Resources:
               Version: "1.0.0"
             Pipeline:
               - invokeCreatePostLambda
-
+          sendMessage:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: "1.0.0"
+            Pipeline:
+              - invokeSendMessageLambda
         Query:
           generateSuggestions:
             Runtime:

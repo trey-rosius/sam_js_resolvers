@@ -21,6 +21,7 @@ type Mutation {
   createPostLambda(postInput: CreatePostInput!): Post! @aws_api_key
   createComment(commentInput: CreateCommentInput!): Comment!
     @aws_cognito_user_pools
+  sendMessage(input: MessageInput!): Message! @aws_api_key
   deletePost(userId: String!, postId: String!): Boolean! @aws_api_key
 }
 
@@ -43,6 +44,31 @@ type Comment @aws_cognito_user_pools {
   postId: String!
   comment: String!
   createdOn: AWSTimestamp
+}
+
+type Message @aws_api_key {
+  id: String!
+  messageType: MESSAGETYPE!
+  senderId: String!
+  receiverId: String!
+  text: String
+  read: Boolean!
+  image: String
+  createdOn: AWSTimestamp!
+}
+
+input MessageInput @aws_api_key {
+  messageType: MESSAGETYPE!
+  senderId: String!
+  receiverId: String!
+  text: String
+  image: String
+  read: Boolean!
+}
+
+enum MESSAGETYPE {
+  TEXT
+  IMAGE
 }
 
 input CreateCommentInput @aws_cognito_user_pools {

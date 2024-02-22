@@ -10,3 +10,7 @@ export function request(ctx) {
 
   return remove({ key: key });
 }
+
+export function respose(ctx) {
+  return ctx.result;
+}

@@ -1,10 +1,16 @@
 API_URL=""
 API_KEY=""
 echo $API
-jq -ncM '{method: "POST", url: "https://vuamteij4fezzkvop5d3furvlq.appsync-api.us-east-2.amazonaws.com/graphql", body: {query: "mutation create { createPost(postInput:{content: \"this is the lambda function content\", imageUrl:\"rosius.jpg\",userId:\"test@gmail.com\"}) { content
-id
-imageUrl
-userId } }"} | @base64, header: {"content-type": ["application/json"], "x-api-key": ["da2-mfjkd2tezzamppchgohq6sakw4"]}}' | vegeta attack -format=json -duration=60s | tee report.bin | vegeta report
+jq -ncM '{method: "POST", url: "https://ixtujrbgg5dj7ly7chwwl552zq.appsync-api.us-east-1.amazonaws.com/graphql", body: {query: "mutation create { sendMessage(input:{text: \"this is the chat message\",
+read: false,messageType: \"IMAGE\",receiverId: \"atehrosius@gmail.com\",
+ image:\"rosius.jpg\",senderId:\"test@gmail.com\"}) {    
+     id
+    image
+    messageType
+    read
+    senderId
+    receiverId
+    text} }"} | @base64, header: {"content-type": ["application/json"], "x-api-key": ["da2-rzse35z77ra6fhnbuvx3htkupy"]}}' | vegeta attack -format=json -duration=60s | tee report.bin | vegeta report
 
 ### Lambda function
 

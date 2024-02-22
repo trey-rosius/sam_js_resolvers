@@ -1,6 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import { v4 as uuidv4 } from "uuid";
+
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
@@ -14,16 +14,16 @@ export const handler = async (event) => {
   const date = Date.now();
   console.log("Received event is {}", JSON.stringify(event, 3));
   const key = {
-    PK: `USER#${event.arguments.postInput.userId}`,
-    SK: `POST#${ksuidFromDate}`,
+    PK: `MESSAGE#${ksuidFromDate}`,
+    SK: `MESSAGE#${ksuidFromDate}`,
   };
 
-  const postItem = {
-    ...event.arguments.postInput,
-    PK: `USER#${event.arguments.postInput.userId}`,
-    SK: `POST#${ksuidFromDate}`,
-    GSI2PK: "POST#",
-    GSI2SK: `POST#${ksuidFromDate}`,
+  const messageItem = {
+    ...event.arguments.input,
+    PK: `MESSAGE#${ksuidFromDate}`,
+    SK: `MESSAGE#${ksuidFromDate}`,
+    GSI4PK: `USER#${event.arguments.input.senderId}`,
+    GSI4SK: `MESSAGE#${ksuidFromDate}`,
     id: ksuidFromDate,
     createdOn: date,
   };
@@ -33,11 +33,11 @@ export const handler = async (event) => {
   const command = new PutCommand({
     TableName: tableName,
     Key: key,
-    Item: postItem,
+    Item: messageItem,
   });
 
   const response = await docClient.send(command);
 
   console.log(response);
-  return postItem;
+  return messageItem;
 };
